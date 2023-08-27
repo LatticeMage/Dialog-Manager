@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "id": "unique_id",
+  "dialog": "ch_1_03",
+  "choices": [
+    {
+      "textId": "choice_1"
+    },
+    {
+      "textId": "choice_2"
+    }
+  ]
+}

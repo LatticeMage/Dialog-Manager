@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.IO;
+using Newtonsoft.Json.Linq;  // Required for Json.NET
 
 public class BranchEditorWindow : EditorWindow
 {
@@ -57,17 +58,15 @@ public class BranchEditorWindow : EditorWindow
     {
         if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
         {
-            string content = File.ReadAllText(filePath);
-            if (int.TryParse(content, out int currentValue))
-            {
-                currentValue++;
-                File.WriteAllText(filePath, currentValue.ToString());
-                UpdateContentLabel(); // Update the label with the new value
-            }
-            else
-            {
-                Debug.LogError("Failed to parse content to integer.");
-            }
+            string jsonContent = File.ReadAllText(filePath);
+            JObject jsonObj = JObject.Parse(jsonContent);
+
+            int currentNumber = jsonObj["number"].Value<int>();
+            jsonObj["number"] = currentNumber + 1; // Increment the number value
+
+            File.WriteAllText(filePath, jsonObj.ToString());
+
+            UpdateContentLabel(); // Update the label with the new value
         }
         else
         {
