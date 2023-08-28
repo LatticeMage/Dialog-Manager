@@ -5,6 +5,6 @@
         <ui:Button text="Load" display-tooltip-when-elided="true" name="load" style="height: 30px; width: 96px; align-items: auto;" />
         <ui:Button text="Increment" display-tooltip-when-elided="true" name="increment" style="height: 30px; width: 93px; justify-content: flex-start; align-items: auto; position: relative; -unity-text-align: middle-center;" />
         <ui:TextField picking-mode="Ignore" label="Text Field" value="Assets/DialogFlow Editor/" name="filePathField" style="height: 40px; width: 400px;" />
-        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="contentLabel" />
+        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="contentLabel" style="max-width: 300px;" />
     </ui:VisualElement>
 </ui:UXML>
