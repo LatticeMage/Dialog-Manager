@@ -57,9 +57,11 @@ public class BranchEditorWindow : EditorWindow
 
     private void UpdateContentLabel()
     {
-        if (!string.IsNullOrEmpty(filePath) && nodesHandler.Nodes.ContainsKey(filePath))
+        var fileName = Path.GetFileNameWithoutExtension(filePath);  // Extract filename
+
+        if (!string.IsNullOrEmpty(fileName) && nodesHandler.Nodes.ContainsKey(fileName)) // Use filename for the lookup
         {
-            JsonNode rootNode = nodesHandler.Nodes[filePath];
+            JsonNode rootNode = nodesHandler.Nodes[fileName];
             var contentLabel = rootVisualElement.Q<Label>("contentLabel");
             contentLabel.text = rootNode.ToString();
         }
@@ -68,6 +70,7 @@ public class BranchEditorWindow : EditorWindow
             Debug.LogError($"File not found or not loaded: {filePath}");
         }
     }
+
 
     private void OnLoadButtonClick()
     {
