@@ -3,12 +3,12 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.IO;
-using Newtonsoft.Json.Linq;
 
 public class BranchEditorWindow : EditorWindow
 {
     private string filePath;
     private JsonNodesHandler nodesHandler = new JsonNodesHandler();
+    private JsonGraphView graphView;
 
     [MenuItem("Tools/Branch Editor")]
     public static void ShowWindow()
@@ -26,6 +26,11 @@ public class BranchEditorWindow : EditorWindow
         // Load the stylesheet
         var styles = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/DialogFlow Editor/BranchEditorStyles.uss");
         rootVisualElement.styleSheets.Add(styles);
+
+        graphView = new JsonGraphView();
+        graphView.StretchToParentSize();
+        var jsonGraphVisualElement = rootVisualElement.Q<VisualElement>("JsonGraph");
+        jsonGraphVisualElement.Add(graphView);
 
         // Hook up the filePath field
         var filePathField = rootVisualElement.Q<TextField>("filePathField");
@@ -57,8 +62,6 @@ public class BranchEditorWindow : EditorWindow
         {
             JsonNode rootNode = nodesHandler.Nodes[filePath];
             var contentLabel = rootVisualElement.Q<Label>("contentLabel");
-
-            // Assuming JsonNode has a ToString() method or similar to get its JSON content
             contentLabel.text = rootNode.ToString();
         }
         else
@@ -67,19 +70,14 @@ public class BranchEditorWindow : EditorWindow
         }
     }
 
-
     private void OnLoadButtonClick()
     {
-        // Clear the existing data
         nodesHandler.Clear();
 
         if (!string.IsNullOrEmpty(filePath))
-        {           
-
-            // Load the data again
+        {
             nodesHandler.LoadRecursive(filePath);
-
-            // Update the label with the new content
+            graphView.PopulateGraph(nodesHandler);
             UpdateContentLabel();
         }
         else
@@ -88,15 +86,13 @@ public class BranchEditorWindow : EditorWindow
         }
     }
 
-
     private void OnIncrementButtonClick()
     {
         if (nodesHandler.Nodes.ContainsKey(filePath))
         {
-            // Increment only the root json
             JsonNode rootNode = nodesHandler.Nodes[filePath];
             rootNode.Number += 1;
-            UpdateContentLabel(); // Update the label with the new value
+            UpdateContentLabel();
         }
         else
         {
