@@ -29,7 +29,6 @@ public class JsonGraphView : GraphView
         foreach (var entry in nodesHandler.Nodes)
         {
             var jsonNode = entry.Value;
-            Debug.Log($"Created node with ID: {jsonNode.Id}");
 
             var graphNode = new JsonGraphNode(jsonNode);
             graphNode.SetPosition(new Rect(xPosition, 100, 100, 150));  // Set position
@@ -57,8 +56,6 @@ public class JsonGraphView : GraphView
 
                 if (nodesLookup.TryGetValue(targetNodeId, out var targetGraphNode))  // Use the ID to look up
                 {
-                    Debug.Log($"Node {graphNode.JsonNode.Id} is pointing to {targetGraphNode.JsonNode.Id}");
-
                     // If the target node doesn't have an input port, create it
                     if (targetGraphNode.inputContainer.childCount == 0)
                     {
