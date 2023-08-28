@@ -38,21 +38,41 @@ public class BranchEditorWindow : EditorWindow
             EditorPrefs.SetString("SavedFilePath", filePath);
         });
 
-        // Hook up the increment button click event
+        // Hook up the buttons
+        var loadButton = rootVisualElement.Q<Button>("load");
+        loadButton.clicked += OnLoadButtonClick;
+
         var incrementButton = rootVisualElement.Q<Button>("increment");
         incrementButton.clicked += OnIncrementButtonClick;
 
-        // Load the text content from the file and set it to the label, if a filePath exists
+        var saveButton = rootVisualElement.Q<Button>("save");
+        saveButton.clicked += OnSaveButtonClick;
+
         UpdateContentLabel();
     }
 
     private void UpdateContentLabel()
     {
+        if (!string.IsNullOrEmpty(filePath) && nodesHandler.Nodes.ContainsKey(filePath))
+        {
+            JsonNode rootNode = nodesHandler.Nodes[filePath];
+            var contentLabel = rootVisualElement.Q<Label>("contentLabel");
+
+            // Assuming JsonNode has a ToString() method or similar to get its JSON content
+            contentLabel.text = rootNode.ToString();
+        }
+        else
+        {
+            Debug.LogError($"File not found or not loaded: {filePath}");
+        }
+    }
+
+
+    private void OnLoadButtonClick()
+    {
         if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
         {
-            string textContent = File.ReadAllText(filePath);
-            var contentLabel = rootVisualElement.Q<Label>("contentLabel");
-            contentLabel.text = textContent;
+            nodesHandler.LoadRecursive(filePath); // Load all nodes recursively from the root
         }
         else
         {
@@ -62,29 +82,21 @@ public class BranchEditorWindow : EditorWindow
 
     private void OnIncrementButtonClick()
     {
-        if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+        if (nodesHandler.Nodes.ContainsKey(filePath))
         {
-            nodesHandler.LoadRecursive(filePath); // This will recursively load all nodes
-
-            if (nodesHandler.Nodes.ContainsKey(filePath))
-            {
-                // Increment only the root json
-                JsonNode rootNode = nodesHandler.Nodes[filePath];
-                rootNode.Number += 1;
-
-                // Save the modified root node
-                rootNode.Save();
-                UpdateContentLabel(); // Update the label with the new value
-            }
-            else
-            {
-                Debug.LogError($"Could not find node for file: {filePath}");
-            }
+            // Increment only the root json
+            JsonNode rootNode = nodesHandler.Nodes[filePath];
+            rootNode.Number += 1;
+            UpdateContentLabel(); // Update the label with the new value
         }
         else
         {
-            Debug.LogError($"File not found: {filePath}");
+            Debug.LogError($"Could not find node for file: {filePath}");
         }
     }
 
+    private void OnSaveButtonClick()
+    {
+        nodesHandler.SaveAll(); // Save all modified nodes
+    }
 }

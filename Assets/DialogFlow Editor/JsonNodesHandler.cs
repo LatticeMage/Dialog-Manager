@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,10 @@ public class JsonNode
     {
         string updatedJsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(this);
         File.WriteAllText(this.FilePath, updatedJsonContent);
+    }
+    public override string ToString()
+    {
+        return JsonConvert.SerializeObject(this, Formatting.Indented);
     }
 }
 
