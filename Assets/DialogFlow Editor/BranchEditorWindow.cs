@@ -3,17 +3,20 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.IO;
-using Newtonsoft.Json.Linq;  // Required for Json.NET
+using Newtonsoft.Json.Linq;
 
 public class BranchEditorWindow : EditorWindow
 {
     private string filePath;
 
+    // Static variable to hold the JSON content in memory
+    private static string jsonInMemory = null;
+
     [MenuItem("Tools/Branch Editor")]
     public static void ShowWindow()
     {
         var window = GetWindow<BranchEditorWindow>("Branch Editor");
-        window.minSize = new Vector2(400, 300);  // Set minimum window size
+        window.minSize = new Vector2(400, 300);
     }
 
     public void OnEnable()
@@ -36,7 +39,17 @@ public class BranchEditorWindow : EditorWindow
         var incrementButton = rootVisualElement.Q<Button>("increment");
         incrementButton.clicked += OnIncrementButtonClick;
 
-        // Load the text content from the file and set it to the label, if a filePath exists
+        // Retrieve the saved path from EditorPrefs and set it as the default value
+        filePath = EditorPrefs.GetString("SavedFilePath", "Assets/DialogFlow Editor/");
+        filePathField.value = filePath;
+
+        filePathField.RegisterValueChangedCallback(e =>
+        {
+            filePath = e.newValue;
+            // Save the current filePath to EditorPrefs whenever it changes
+            EditorPrefs.SetString("SavedFilePath", filePath);
+        });
+
         UpdateContentLabel();
     }
 
@@ -44,9 +57,14 @@ public class BranchEditorWindow : EditorWindow
     {
         if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
         {
-            string textContent = File.ReadAllText(filePath);
+            // If jsonInMemory is null, read the file from disk
+            if (jsonInMemory == null)
+            {
+                jsonInMemory = File.ReadAllText(filePath);
+            }
+
             var contentLabel = rootVisualElement.Q<Label>("contentLabel");
-            contentLabel.text = textContent;
+            contentLabel.text = jsonInMemory;
         }
         else
         {
@@ -58,15 +76,17 @@ public class BranchEditorWindow : EditorWindow
     {
         if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
         {
-            string jsonContent = File.ReadAllText(filePath);
-            JObject jsonObj = JObject.Parse(jsonContent);
+            // Use the content in memory
+            JObject jsonObj = JObject.Parse(jsonInMemory);
 
             int currentNumber = jsonObj["number"].Value<int>();
-            jsonObj["number"] = currentNumber + 1; // Increment the number value
+            jsonObj["number"] = currentNumber + 1;
 
-            File.WriteAllText(filePath, jsonObj.ToString());
+            // Update the in-memory content and write it to disk
+            jsonInMemory = jsonObj.ToString();
+            File.WriteAllText(filePath, jsonInMemory);
 
-            UpdateContentLabel(); // Update the label with the new value
+            UpdateContentLabel();
         }
         else
         {
