@@ -70,15 +70,24 @@ public class BranchEditorWindow : EditorWindow
 
     private void OnLoadButtonClick()
     {
-        if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
-        {
-            nodesHandler.LoadRecursive(filePath); // Load all nodes recursively from the root
+        // Clear the existing data
+        nodesHandler.Clear();
+
+        if (!string.IsNullOrEmpty(filePath))
+        {           
+
+            // Load the data again
+            nodesHandler.LoadRecursive(filePath);
+
+            // Update the label with the new content
+            UpdateContentLabel();
         }
         else
         {
-            Debug.LogError($"File not found: {filePath}");
+            Debug.LogError($"File path not specified.");
         }
     }
+
 
     private void OnIncrementButtonClick()
     {

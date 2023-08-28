@@ -81,5 +81,10 @@ public class JsonNodesHandler
             node.Save();
         }
     }
+    public void Clear()
+    {
+        Nodes.Clear();
+        loadedFiles.Clear();
+    }
 
 }
