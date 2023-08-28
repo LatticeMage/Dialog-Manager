@@ -1,36 +1,39 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class JsonNode
 {
     public int Number { get; set; }
-    public string Id { get; set; }
+    public string Id { get; set; }  // Will store the ID without folder and .json
     public string Dialog { get; set; }
     public List<Choice> Choices { get; set; } = new List<Choice>();
-    public string FilePath { get; set; } // Storing the file path
-
-    public string SourceFile { get; set; }  // Stores the path of the file this node was loaded from
+    public string FilePath { get; set; }  // Storing the full file path including .json
 
     public static JsonNode FromFile(string filePath)
     {
+        var id = Path.GetFileNameWithoutExtension(filePath);
+        filePath += ".json";  // Append .json extension
+
         string jsonContent = File.ReadAllText(filePath);
-        var node = Newtonsoft.Json.JsonConvert.DeserializeObject<JsonNode>(jsonContent);
-        node.FilePath = filePath; // Setting the file path when loading from file
+        var node = JsonConvert.DeserializeObject<JsonNode>(jsonContent);
+        node.FilePath = filePath;
+        node.Id = id;
         return node;
     }
+
     public void Save()
     {
-        string updatedJsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        string updatedJsonContent = JsonConvert.SerializeObject(this);
         File.WriteAllText(this.FilePath, updatedJsonContent);
     }
+
     public override string ToString()
     {
         return JsonConvert.SerializeObject(this, Formatting.Indented);
     }
+
     public string FileName
     {
         get
@@ -60,7 +63,8 @@ public class JsonNodesHandler
         }
 
         JsonNode node = JsonNode.FromFile(currentPath);
-        Nodes[node.FileName] = node;  // Use FileName here instead of currentPath
+        Nodes[node.Id] = node;  // Use Id property as the key for the dictionary
+
         loadedFiles.Add(currentPath);
 
         string directory = Path.GetDirectoryName(currentPath);
@@ -70,7 +74,7 @@ public class JsonNodesHandler
             if (!string.IsNullOrEmpty(choice.NextNode))
             {
                 // Resolving relative paths
-                string nextPath = Path.Combine(directory, choice.NextNode);
+                string nextPath = Path.Combine(directory, choice.NextNode);  // No need to append .json here
 
                 // Canonicalize the path to remove any ".." or "." segments
                 nextPath = Path.GetFullPath(nextPath);
@@ -88,10 +92,10 @@ public class JsonNodesHandler
             node.Save();
         }
     }
+
     public void Clear()
     {
         Nodes.Clear();
         loadedFiles.Clear();
     }
-
 }

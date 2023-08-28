@@ -5,11 +5,11 @@
   "choices": [
     {
       "textId": "choice_1",
-      "nextnode": "ch_1_02.json"
+      "nextnode": "ch_1_02"
     },
     {
       "textId": "choice_2",
-      "nextnode": "ch_1_03.json"
+      "nextnode": "ch_1_03"
     }
   ]
 }
