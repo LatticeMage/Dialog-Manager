@@ -31,6 +31,13 @@ public class JsonNode
     {
         return JsonConvert.SerializeObject(this, Formatting.Indented);
     }
+    public string FileName
+    {
+        get
+        {
+            return Path.GetFileNameWithoutExtension(FilePath);
+        }
+    }
 }
 
 public class Choice
@@ -53,7 +60,7 @@ public class JsonNodesHandler
         }
 
         JsonNode node = JsonNode.FromFile(currentPath);
-        Nodes[currentPath] = node;
+        Nodes[node.FileName] = node;  // Use FileName here instead of currentPath
         loadedFiles.Add(currentPath);
 
         string directory = Path.GetDirectoryName(currentPath);

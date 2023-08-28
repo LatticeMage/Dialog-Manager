@@ -38,9 +38,9 @@ public class JsonGraphView : GraphView
                 if (string.IsNullOrEmpty(choice.NextNode))
                     continue; // Skip this iteration if there's no NextNode
 
-                var targetPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(graphNode.JsonNode.FilePath), choice.NextNode));
+                var targetFileName = Path.GetFileNameWithoutExtension(choice.NextNode); // Extract filename without extension
 
-                if (nodesLookup.TryGetValue(targetPath, out var targetGraphNode))
+                if (nodesLookup.TryGetValue(targetFileName, out var targetGraphNode)) // Use filename for the lookup
                 {
                     // Ensure that you've defined input and output ports in your JsonGraphNode class
                     var inputPort = targetGraphNode.inputContainer.Q<Port>();

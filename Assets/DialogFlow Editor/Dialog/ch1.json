@@ -1,7 +1,7 @@
 {
   "number": 4,
-  "id": "unique_id",
-  "dialog": "ch_1_03",
+  "id": "ch1",
+  "dialog": "ch1",
   "choices": [
     {
       "textId": "choice_1",

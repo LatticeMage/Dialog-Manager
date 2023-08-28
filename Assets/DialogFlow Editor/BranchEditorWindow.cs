@@ -53,7 +53,6 @@ public class BranchEditorWindow : EditorWindow
         var saveButton = rootVisualElement.Q<Button>("save");
         saveButton.clicked += OnSaveButtonClick;
 
-        UpdateContentLabel();
     }
 
     private void UpdateContentLabel()
