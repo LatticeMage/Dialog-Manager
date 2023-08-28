@@ -72,9 +72,8 @@ public class BranchEditorWindow : EditorWindow
                 JsonNode rootNode = nodesHandler.Nodes[filePath];
                 rootNode.Number += 1;
 
-                // Save the modified root node back to the file
-                string updatedJsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(rootNode);
-                File.WriteAllText(filePath, updatedJsonContent);
+                // Save the modified root node
+                rootNode.Save();
                 UpdateContentLabel(); // Update the label with the new value
             }
             else
@@ -87,4 +86,5 @@ public class BranchEditorWindow : EditorWindow
             Debug.LogError($"File not found: {filePath}");
         }
     }
+
 }

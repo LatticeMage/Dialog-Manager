@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class JsonNode
@@ -9,14 +10,21 @@ public class JsonNode
     public string Id { get; set; }
     public string Dialog { get; set; }
     public List<Choice> Choices { get; set; } = new List<Choice>();
+    public string FilePath { get; set; } // Storing the file path
+
     public string SourceFile { get; set; }  // Stores the path of the file this node was loaded from
 
-    public static JsonNode FromFile(string path)
+    public static JsonNode FromFile(string filePath)
     {
-        string jsonContent = File.ReadAllText(path);
-        JsonNode node = Newtonsoft.Json.JsonConvert.DeserializeObject<JsonNode>(jsonContent);
-        node.SourceFile = path;
+        string jsonContent = File.ReadAllText(filePath);
+        var node = Newtonsoft.Json.JsonConvert.DeserializeObject<JsonNode>(jsonContent);
+        node.FilePath = filePath; // Setting the file path when loading from file
         return node;
+    }
+    public void Save()
+    {
+        string updatedJsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        File.WriteAllText(this.FilePath, updatedJsonContent);
     }
 }
 
@@ -60,4 +68,13 @@ public class JsonNodesHandler
             }
         }
     }
+
+    public void SaveAll()
+    {
+        foreach (var node in Nodes.Values)
+        {
+            node.Save();
+        }
+    }
+
 }
