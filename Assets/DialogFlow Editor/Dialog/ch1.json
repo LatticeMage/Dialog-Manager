@@ -4,10 +4,12 @@
   "dialog": "ch_1_03",
   "choices": [
     {
-      "textId": "choice_1"
+      "textId": "choice_1",
+      "nextnode": "ch_1_02.json"
     },
     {
-      "textId": "choice_2"
+      "textId": "choice_2",
+      "nextnode": "ch_1_03.json"
     }
   ]
 }
