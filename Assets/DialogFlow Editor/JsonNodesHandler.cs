@@ -7,6 +7,12 @@ using UnityEngine;
 namespace Dialog.Json
 {
 
+    public class Choice
+    {
+        public string TextId { get; set; }
+        public string NextNode { get; set; }
+    }
+
     public class JsonNode
     {
         public int Number { get; set; }
@@ -29,7 +35,7 @@ namespace Dialog.Json
 
         public void Save()
         {
-            string updatedJsonContent = JsonConvert.SerializeObject(this);
+            string updatedJsonContent = JsonConvert.SerializeObject(this, Formatting.Indented); 
             File.WriteAllText(this.FilePath, updatedJsonContent);
         }
 
@@ -45,12 +51,6 @@ namespace Dialog.Json
                 return Path.GetFileNameWithoutExtension(FilePath);
             }
         }
-    }
-
-    public class Choice
-    {
-        public string TextId { get; set; }
-        public string NextNode { get; set; }
     }
 
     public class JsonNodesHandler
