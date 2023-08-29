@@ -3,15 +3,35 @@ using UnityEditor.Experimental.GraphView;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using Dialog.Graph;
+
+public class JsonGraphNode : Node
+{
+    public JsonNode JsonNode { get; private set; }
+
+    public JsonGraphNode(JsonNode jsonNode)
+    {
+        JsonNode = jsonNode;
+        title = jsonNode.Id;
+        AddToClassList("jsonGraphNode");
+
+        var dialogLabel = new Label { text = jsonNode.Dialog };
+        mainContainer.Add(dialogLabel);
+    }
+}
 
 public class JsonGraphView : GraphView
 {
+    private SimpleGraphPositions<JsonNode> graphPositions;
+
     public JsonGraphView()
     {
         this.AddManipulator(new ContentZoomer());
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
+
+        graphPositions = new SimpleGraphPositions<JsonNode>();
     }
 
     public void PopulateGraph(JsonNodesHandler nodesHandler)
@@ -23,16 +43,17 @@ public class JsonGraphView : GraphView
         this.DeleteElements(elementsToRemove);
         Dictionary<string, JsonGraphNode> nodesLookup = new Dictionary<string, JsonGraphNode>();
 
-        int xOffset = 150; // Offset for each node on the X axis
-        int xPosition = 0; // Starting position
-
         foreach (var entry in nodesHandler.Nodes)
         {
             var jsonNode = entry.Value;
 
             var graphNode = new JsonGraphNode(jsonNode);
-            graphNode.SetPosition(new Rect(xPosition, 100, 100, 150));  // Set position
-            xPosition += xOffset;  // Increment the position for the next node
+
+            // Using the SimpleGraphPositions class to determine position
+            graphPositions.AddNode(new SimpleGraphNode<JsonNode>(jsonNode));
+            graphPositions.calPos();
+            var position = graphPositions.getPos(jsonNode);
+            graphNode.SetPosition(new Rect(position.x, position.y, 100, 150));
 
             // Create output port for each node
             var outputPort = graphNode.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
