@@ -99,9 +99,10 @@ public class BranchEditorWindow : EditorWindow
 
     private void OnIncrementButtonClick()
     {
-        if (nodesHandler.Nodes.ContainsKey(filePath))
+        var fileName = Path.GetFileNameWithoutExtension(filePath);
+        if (nodesHandler.Nodes.ContainsKey(fileName))
         {
-            JsonNode rootNode = nodesHandler.Nodes[filePath];
+            JsonNode rootNode = nodesHandler.Nodes[fileName];
             rootNode.Number += 1;
             UpdateContentLabel();
         }
