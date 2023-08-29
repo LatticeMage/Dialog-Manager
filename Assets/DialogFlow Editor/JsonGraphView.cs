@@ -4,27 +4,29 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 namespace Dialog.Graph
 {
-    public class JsonGraphNode : Node
+    public class JsonGraphNode : Node, ISimpleGraphNode<Json.JsonNode>
     {
-        public Json.JsonNode JsonNode { get; private set; }
+        public List<Port> InputSlots { get; private set; } = new List<Port>();
+        public List<Port> OutputSlots { get; private set; } = new List<Port>();
+        public Json.JsonNode Data { get; private set; }
 
-        public JsonGraphNode(Json.JsonNode jsonNode)
+        public JsonGraphNode(Json.JsonNode data)
         {
-            JsonNode = jsonNode;
-            title = jsonNode.Id;
+            Data = data;
+
+            title = data.Id;
             AddToClassList("jsonGraphNode");
 
-            var dialogLabel = new Label { text = jsonNode.Dialog };
+            var dialogLabel = new Label { text = data.Dialog };
             mainContainer.Add(dialogLabel);
         }
     }
 
     public class JsonGraphView : GraphView
     {
-        private SimpleGraphPositions<Json.JsonNode> graphPositions;
+        private LayoutHandler<Json.JsonNode> graphPositions;
 
         public JsonGraphView()
         {
@@ -33,7 +35,7 @@ namespace Dialog.Graph
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
 
-            graphPositions = new SimpleGraphPositions<Json.JsonNode>();
+            graphPositions = new LayoutHandler<Json.JsonNode>();
         }
 
         public void PopulateGraph(Json.JsonNodesHandler nodesHandler)
@@ -48,11 +50,10 @@ namespace Dialog.Graph
             foreach (var entry in nodesHandler.Nodes)
             {
                 var jsonNode = entry.Value;
-
                 var graphNode = new JsonGraphNode(jsonNode);
 
                 // Using the SimpleGraphPositions class to determine position
-                graphPositions.AddNode(new SimpleGraphNode<Json.JsonNode>(jsonNode));
+                graphPositions.AddNode(graphNode);
                 graphPositions.calPos();
                 var position = graphPositions.getPos(jsonNode);
                 graphNode.SetPosition(new Rect(position.x, position.y, 100, 150));
@@ -67,13 +68,13 @@ namespace Dialog.Graph
                 inputPort.portName = "In";
                 graphNode.inputContainer.Add(inputPort);
 
-                nodesLookup.Add(graphNode.JsonNode.Id, graphNode);  // Use ID as the key
+                nodesLookup.Add(graphNode.Data.Id, graphNode);  // Use ID as the key
                 this.AddElement(graphNode);
             }
 
             foreach (var graphNode in nodesLookup.Values)
             {
-                foreach (var choice in graphNode.JsonNode.Choices)
+                foreach (var choice in graphNode.Data.Choices)
                 {
                     var targetNodeId = Path.GetFileNameWithoutExtension(choice.NextNode);  // Extract the ID
 
@@ -100,7 +101,7 @@ namespace Dialog.Graph
                     }
                     else
                     {
-                        Debug.LogError($"Failed to find target node with ID: {targetNodeId} from source node {graphNode.JsonNode.Id}");
+                        Debug.LogError($"Failed to find target node with ID: {targetNodeId} from source node {graphNode.Data.Id}");
                     }
                 }
             }

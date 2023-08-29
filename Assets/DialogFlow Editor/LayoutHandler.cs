@@ -12,32 +12,13 @@ namespace Dialog.Graph
         T Data { get; }
     }
 
-
-    public class SimpleGraphNode<TNodeData> : ISimpleGraphNode<TNodeData>
-    {
-        public List<Port> InputSlots { get; private set; }
-        public List<Port> OutputSlots { get; private set; }
-        public TNodeData Data { get; private set; }
-
-        public SimpleGraphNode(TNodeData data)
-        {
-            InputSlots = new List<Port>();
-            OutputSlots = new List<Port>();
-            Data = data;
-        }
-    }
-
-
-
-
-
-    public class SimpleGraphPositions<TNodeData>
+    public class LayoutHandler<TNodeData>
     {
         private HashSet<ISimpleGraphNode<TNodeData>> nodes;
         private Dictionary<TNodeData, ISimpleGraphNode<TNodeData>> dataToNodeLookup;
         private Dictionary<ISimpleGraphNode<TNodeData>, Vector2> nodePositions;
 
-        public SimpleGraphPositions()
+        public LayoutHandler()
         {
             nodes = new HashSet<ISimpleGraphNode<TNodeData>>();
             nodePositions = new Dictionary<ISimpleGraphNode<TNodeData>, Vector2>();
