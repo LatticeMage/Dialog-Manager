@@ -3,6 +3,8 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.IO;
+using Dialog.Graph;
+using Dialog.Json;
 
 public class BranchEditorWindow : EditorWindow
 {
