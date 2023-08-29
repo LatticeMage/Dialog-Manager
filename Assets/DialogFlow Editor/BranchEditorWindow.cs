@@ -29,10 +29,17 @@ public class BranchEditorWindow : EditorWindow
         var styles = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/DialogFlow Editor/BranchEditorStyles.uss");
         rootVisualElement.styleSheets.Add(styles);
 
+        // Create the JsonGraphView and add it to the ScrollView named "JsonGraph"
         graphView = new JsonGraphView();
         graphView.StretchToParentSize();
-        var jsonGraphVisualElement = rootVisualElement.Q<VisualElement>("JsonGraph");
-        jsonGraphVisualElement.Add(graphView);
+        
+        // Reference the ScrollView and ensure it stretches to its parent size
+        var jsonGraphScrollView = rootVisualElement.Q<ScrollView>("JsonGraph");
+        jsonGraphScrollView.StretchToParentSize();
+        jsonGraphScrollView.contentContainer.StretchToParentSize();
+        jsonGraphScrollView.Add(graphView);
+    
+    
 
         // Hook up the filePath field
         var filePathField = rootVisualElement.Q<TextField>("filePathField");
