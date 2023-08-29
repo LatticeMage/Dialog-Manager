@@ -12,13 +12,13 @@ namespace Dialog.Graph
         T Data { get; }
     }
 
-    public class LayoutHandler<TNodeData>
+    public class NodeLayoutHandler<TNodeData>
     {
         private HashSet<ISimpleGraphNode<TNodeData>> nodes;
         private Dictionary<TNodeData, ISimpleGraphNode<TNodeData>> dataToNodeLookup;
         private Dictionary<ISimpleGraphNode<TNodeData>, Vector2> nodePositions;
 
-        public LayoutHandler()
+        public NodeLayoutHandler()
         {
             nodes = new HashSet<ISimpleGraphNode<TNodeData>>();
             nodePositions = new Dictionary<ISimpleGraphNode<TNodeData>, Vector2>();

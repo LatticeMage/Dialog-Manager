@@ -62,7 +62,7 @@ namespace Dialog.Json
         {
             if (loadedFiles.Contains(currentPath))
             {
-                Debug.LogError($"Cycle detected: {currentPath} has already been loaded. Stopping recursive load.");
+                Debug.Log($"Duplicated Node detected: {currentPath} has already been loaded. Stopping recursive load.");
                 return;
             }
 

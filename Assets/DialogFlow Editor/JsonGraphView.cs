@@ -26,7 +26,7 @@ namespace Dialog.Graph
 
     public class JsonGraphView : GraphView
     {
-        private LayoutHandler<Json.JsonNode> graphPositions;
+        private NodeLayoutHandler<Json.JsonNode> graphPositions;
 
         public JsonGraphView()
         {
@@ -35,7 +35,7 @@ namespace Dialog.Graph
             this.AddManipulator(new SelectionDragger());
             this.AddManipulator(new RectangleSelector());
 
-            graphPositions = new LayoutHandler<Json.JsonNode>();
+            graphPositions = new NodeLayoutHandler<Json.JsonNode>();
         }
 
         public void PopulateGraph(Json.JsonNodesHandler nodesHandler)

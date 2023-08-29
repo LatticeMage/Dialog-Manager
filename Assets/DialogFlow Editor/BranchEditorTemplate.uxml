@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/DialogFlow%20Editor/BranchEditorStyles.uss?fileID=7433441132597879392&amp;guid=1e171cb3f63595741b0a4669d12cff93&amp;type=3#BranchEditorStyles" />
-    <ui:VisualElement name="JsonGraph" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 245px; width: 579px;" />
+    <ui:VisualElement name="JsonGraph" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: auto; width: auto;" />
     <ui:VisualElement name="BottomRegion" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 40px; width: auto; flex-direction: row; align-self: flex-end; justify-content: flex-start; align-items: flex-start; bottom: 0; left: 0; right: 33px; max-height: 40px;">
         <ui:Button text="Increment" display-tooltip-when-elided="true" name="increment" style="height: 30px; width: auto; justify-content: flex-start; align-items: auto; position: relative; -unity-text-align: middle-center;" />
         <ui:Button text="save" display-tooltip-when-elided="true" name="save" style="height: 30px;" />

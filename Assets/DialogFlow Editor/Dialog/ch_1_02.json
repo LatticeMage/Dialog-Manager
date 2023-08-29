@@ -3,7 +3,8 @@
     "dialog": "ch_1_02",
     "choices": [
         {
-            "textId": "choice_1"
+            "textId": "choice_1",
+            "nextnode": "ch_1_05"
         },
         {
             "textId": "choice_2"
