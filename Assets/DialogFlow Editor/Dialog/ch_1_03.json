@@ -1,11 +1,7 @@
 {
-    "number": 1,
-    "id": "ch_1_03",
-    "dialog": "ch_1_03",
     "choices": [
         {
-            "textId": "choice_1",
-            "nextnode": "ch_1_05"
+            "textId": "choice_1"
             
         },
         {

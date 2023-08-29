@@ -21,6 +21,16 @@ namespace Dialog.Graph
 
             var dialogLabel = new Label { text = data.Dialog };
             mainContainer.Add(dialogLabel);
+
+            // Create output port for each node
+            var outputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
+            outputPort.portName = "Out";
+            this.outputContainer.Add(outputPort);
+
+            // Create input port for each node
+            var inputPort = this.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(float));
+            inputPort.portName = "In";
+            this.inputContainer.Add(inputPort);
         }
     }
 
@@ -58,16 +68,6 @@ namespace Dialog.Graph
                 var position = graphPositions.getPos(jsonNode);
                 graphNode.SetPosition(new Rect(position.x, position.y, 100, 150));
 
-                // Create output port for each node
-                var outputPort = graphNode.InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(float));
-                outputPort.portName = "Out";
-                graphNode.outputContainer.Add(outputPort);
-
-                // Create input port for each node
-                var inputPort = graphNode.InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(float));
-                inputPort.portName = "In";
-                graphNode.inputContainer.Add(inputPort);
-
                 nodesLookup.Add(graphNode.Data.Id, graphNode);  // Use ID as the key
                 this.AddElement(graphNode);
             }
@@ -77,6 +77,10 @@ namespace Dialog.Graph
                 foreach (var choice in graphNode.Data.Choices)
                 {
                     var targetNodeId = Path.GetFileNameWithoutExtension(choice.NextNode);  // Extract the ID
+                    if (string.IsNullOrEmpty(targetNodeId))
+                    {
+                        continue;
+                    }
 
                     if (nodesLookup.TryGetValue(targetNodeId, out var targetGraphNode))  // Use the ID to look up
                     {
