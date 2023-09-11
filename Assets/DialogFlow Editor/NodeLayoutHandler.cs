@@ -1,3 +1,17 @@
+
+/*
+ * NodeLayoutHandler.cs
+ * --------------------
+ * Provides functionality to manage the layout of nodes in a graph.
+ * 
+ * Key Components:
+ * - ISimpleGraphNode<T>: A generic interface for graph nodes.
+ * - NodeLayoutHandler<TNodeData>: A generic class to handle node layouts.
+ * 
+ * Usage:
+ * - NodeLayoutHandler is responsible for determining node positions within the graph view.
+ * - Provides a mechanism to quickly retrieve node position based on its associated data.
+ */
 using UnityEditor.Experimental.GraphView; // Added this for access to the Port class
 using System.Collections.Generic;
 using UnityEngine;

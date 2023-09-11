@@ -1,3 +1,18 @@
+
+/*
+ * BranchEditorWindow.cs
+ * ---------------------
+ * Provides a custom Unity Editor window for managing branches in the dialog system.
+ * 
+ * Key Components:
+ * - ShowWindow: Initializes the editor window with a minimum size.
+ * - OnEnable: Sets up the UI layout, styles, and events for the window.
+ * - Button Actions: Functions to handle user interactions like loading JSON data, incrementing node values, and saving.
+ * 
+ * Usage:
+ * - Use the Unity Editor menu to open the Branch Editor window.
+ * - Specify a JSON file path to visualize and manage dialog branches.
+ */
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;

@@ -1,3 +1,17 @@
+
+/*
+ * JsonGraphView.cs
+ * ----------------
+ * Provides classes and logic for representing and displaying JSON data as nodes in a graph.
+ * 
+ * Key Components:
+ * - JsonGraphNode: Represents individual nodes in the graph.
+ * - JsonGraphView: Manages the overall visualization of the nodes and their connections.
+ * 
+ * Usage:
+ * - JsonGraphView takes a JsonNodesHandler instance to populate the graph.
+ * - Nodes and their connections are automatically visualized based on the loaded JSON data.
+ */
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System.IO;
