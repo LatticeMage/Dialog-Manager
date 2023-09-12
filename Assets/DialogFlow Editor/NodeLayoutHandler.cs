@@ -21,8 +21,8 @@ namespace Dialog.Graph
 {
     public interface ISimpleGraphNode<T>
     {
-        List<Port> InputSlots { get; }
-        List<Port> OutputSlots { get; }
+        List<ISimpleGraphNode<T>> preNodes { get; }
+        List<ISimpleGraphNode<T>> nextNodes { get; }
         T Data { get; }
     }
 

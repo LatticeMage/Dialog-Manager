@@ -22,8 +22,8 @@ namespace Dialog.Graph
 {
     public class JsonGraphNode : Node, ISimpleGraphNode<Json.JsonNode>
     {
-        public List<Port> InputSlots { get; private set; } = new List<Port>();
-        public List<Port> OutputSlots { get; private set; } = new List<Port>();
+        public List<ISimpleGraphNode<Json.JsonNode>> preNodes { get; private set; } = new List<ISimpleGraphNode<Json.JsonNode>>();
+        public List<ISimpleGraphNode<Json.JsonNode>> nextNodes { get; private set; } = new List<ISimpleGraphNode<Json.JsonNode>>();
         public Json.JsonNode Data { get; private set; }
 
         public JsonGraphNode(Json.JsonNode data)
