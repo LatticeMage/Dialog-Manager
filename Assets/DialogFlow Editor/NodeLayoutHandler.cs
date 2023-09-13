@@ -45,7 +45,7 @@ namespace Dialog.Graph
             dataToNodeLookup[node.Data] = node;
         }
 
-        public void calPos()
+        public void calPos(TNodeData root)
         {
             int xOffset = 150;
             int xPosition = 0;

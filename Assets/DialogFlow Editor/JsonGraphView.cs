@@ -71,6 +71,7 @@ namespace Dialog.Graph
             this.DeleteElements(elementsToRemove);
             Dictionary<string, JsonGraphNode> nodesLookup = new Dictionary<string, JsonGraphNode>();
 
+            // 1. Add all nodes first
             foreach (var entry in nodesHandler.Nodes)
             {
                 var jsonNode = entry.Value;
@@ -78,13 +79,49 @@ namespace Dialog.Graph
 
                 // Using the SimpleGraphPositions class to determine position
                 graphPositions.AddNode(graphNode);
-                graphPositions.calPos();
-                var position = graphPositions.getPos(jsonNode);
-                graphNode.SetPosition(new Rect(position.x, position.y, 100, 150));
 
                 nodesLookup.Add(graphNode.Data.Id, graphNode);  // Use ID as the key
+            }
+
+            // 2. Calculate positions once for all nodes
+            graphPositions.calPos(nodesHandler.Nodes["root"]);
+
+            // 3. Assign calculated positions to all nodes
+            foreach (var entry in nodesHandler.Nodes)
+            {
+                var jsonNode = entry.Value;
+                var graphNode = nodesLookup[jsonNode.Id];  // Retrieve the previously added node using ID as the key
+                var position = graphPositions.getPos(jsonNode);
+
+                graphNode.SetPosition(new Rect(position.x, position.y, 100, 150));
                 this.AddElement(graphNode);
             }
+
+
+            foreach (var entry in nodesHandler.Nodes)
+            {
+                var currentNodeId = entry.Key;
+                var currentNodeData = entry.Value;
+
+                if (nodesLookup.TryGetValue(currentNodeId, out var currentNode))
+                {
+                    foreach (var choice in currentNodeData.Choices)
+                    {
+                        var targetNodeId = Path.GetFileNameWithoutExtension(choice.NextNode);  // Extract the ID
+                        if (string.IsNullOrEmpty(targetNodeId))
+                        {
+                            continue;
+                        }
+
+                        if (nodesLookup.TryGetValue(targetNodeId, out var targetNode))
+                        {
+                            currentNode.nextNodes.Add(targetNode);
+                        }
+                    }
+                }
+            }
+            
+
 
             foreach (var graphNode in nodesLookup.Values)
             {

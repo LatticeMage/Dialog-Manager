@@ -1,18 +1,3 @@
-
-/*
- * JsonNodesHandler.cs
- * -------------------
- * Provides classes to handle the loading, management, and representation of JSON data for dialog branches.
- * 
- * Key Components:
- * - Choice: Represents a choice within a dialog node.
- * - JsonNode: Represents a dialog segment in the branching narrative.
- * - JsonNodesHandler: Manages the loading, saving, and organization of multiple JsonNode instances.
- * 
- * Usage:
- * - JsonNode can be loaded from a JSON file and saved back to it.
- * - JsonNodesHandler allows recursive loading of interconnected dialog nodes to build the entire dialog tree.
- */
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
