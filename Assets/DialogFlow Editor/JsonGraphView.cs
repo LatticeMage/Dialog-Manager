@@ -1,17 +1,22 @@
+/// <summary>
+/// JsonGraphView.cs provides a visualization of JSON dialogue data as interconnected nodes within a graph.
+/// </summary>
+/// 
+/// <remarks>
+/// Core Components:
+/// - JsonGraphNode: A visual representation of individual JSON nodes in the graph. It visualizes the node's data and provides ports for connections.
+/// - JsonGraphView: Manages the overall visualization of the graph by arranging nodes and connecting them based on the JSON data.
+///
+/// Workflow:
+/// - Initialize a JsonGraphView instance.
+/// - Populate the graph view by providing a JsonNodesHandler instance containing the loaded JSON data to the `PopulateGraph` method.
+/// - The JsonGraphView will automatically visualize the nodes, their data, and establish connections between them.
+///
+/// Note:
+/// The visualization relies on Unity's UIElements and the GraphView API, ensuring smooth integration within Unity's Editor environment.
+/// </remarks>
+///
 
-/*
- * JsonGraphView.cs
- * ----------------
- * Provides classes and logic for representing and displaying JSON data as nodes in a graph.
- * 
- * Key Components:
- * - JsonGraphNode: Represents individual nodes in the graph.
- * - JsonGraphView: Manages the overall visualization of the nodes and their connections.
- * 
- * Usage:
- * - JsonGraphView takes a JsonNodesHandler instance to populate the graph.
- * - Nodes and their connections are automatically visualized based on the loaded JSON data.
- */
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System.IO;
@@ -87,7 +92,7 @@ namespace Dialog.Graph
             }
 
 
-
+            // 2. Fill Data
 
             foreach (var entry in nodesHandler.Nodes)
             {
@@ -112,10 +117,10 @@ namespace Dialog.Graph
                 }
             }
 
-            // 2. Calculate positions once for all nodes
-            graphPositions.calPos(nodesHandler.Nodes["root"]);
+            // 3. Calculate positions once for all nodes
+            graphPositions.calPos(nodesHandler.Root);
 
-            // 3. Assign calculated positions to all nodes
+            // 4. Assign calculated positions to all nodes
             foreach (var entry in nodesHandler.Nodes)
             {
                 var jsonNode = entry.Value;
@@ -126,6 +131,7 @@ namespace Dialog.Graph
                 this.AddElement(graphNode);
             }
 
+            // 5. Get Pose
             foreach (var graphNode in nodesLookup.Values)
             {
                 foreach (var choice in graphNode.Data.Choices)

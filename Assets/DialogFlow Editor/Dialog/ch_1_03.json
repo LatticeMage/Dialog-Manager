@@ -1,11 +1,16 @@
 {
     "choices": [
         {
-            "textId": "choice_1"
-            
+            "textId": "choice_1",
+            "nextnode": "ch_1_06"
         },
         {
-            "textId": "choice_2"
+            "textId": "choice_1",
+            "nextnode": "ch_1_07"
+        },
+        {
+            "textId": "choice_1",
+            "nextnode": "ch_1_08"
         }
     ]
 }

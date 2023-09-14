@@ -1,3 +1,23 @@
+/// <summary>
+/// The JsonNodesHandler.cs contains classes to recursively load JSON files representing dialogue nodes and their choices.
+/// </summary>
+/// 
+/// <remarks>
+/// The primary class, JsonNodesHandler, provides functionality to:
+/// - Recursively load JSON files starting from a root or entry node.
+/// - Keep track of the loaded nodes to prevent duplicates.
+/// - Save all loaded nodes back to their respective files.
+///
+/// The file also defines a structure for the individual dialogue nodes (JsonNode) and their choices (Choice).
+///
+/// Usage:
+/// 1. Create an instance of the JsonNodesHandler class.
+/// 2. Use the LoadRecursive method, providing the path to the root JSON file.
+/// 3. Access the Root property to get the entry node, and use the Nodes property to access all loaded nodes.
+/// 4. If any changes are made to the nodes, you can use the SaveAll method to save them back to the files.
+/// </remarks>
+///
+
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -57,6 +77,7 @@ namespace Dialog.Json
     {
         private HashSet<string> loadedFiles = new HashSet<string>();
         public Dictionary<string, JsonNode> Nodes { get; private set; } = new Dictionary<string, JsonNode>();
+        public JsonNode Root { get; private set; }
 
         public void LoadRecursive(string currentPath)
         {
@@ -67,7 +88,13 @@ namespace Dialog.Json
             }
 
             JsonNode node = JsonNode.FromFile(currentPath);
-            Nodes[node.Id] = node;  // Use Id property as the key for the dictionary
+            Nodes[node.Id] = node;
+
+            // Assigning the root node if it hasn't been set yet
+            if (Root == null)
+            {
+                Root = node;
+            }
 
             loadedFiles.Add(currentPath);
 
@@ -78,8 +105,7 @@ namespace Dialog.Json
                 if (!string.IsNullOrEmpty(choice.NextNode))
                 {
                     // Resolving relative paths
-                    string nextPath = Path.Combine(directory, choice.NextNode);  // No need to append .json here
-
+                    string nextPath = Path.Combine(directory, choice.NextNode);
                     // Canonicalize the path to remove any ".." or "." segments
                     nextPath = Path.GetFullPath(nextPath);
 
@@ -88,7 +114,6 @@ namespace Dialog.Json
                 }
             }
         }
-
         public void SaveAll()
         {
             foreach (var node in Nodes.Values)

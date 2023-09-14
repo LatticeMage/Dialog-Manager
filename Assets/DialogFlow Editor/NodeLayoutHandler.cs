@@ -1,18 +1,33 @@
+/// <summary>
+/// The NodeLayoutHandler class is responsible for managing and calculating the positions of graph nodes in a two-dimensional layout.
+/// </summary>
+/// <typeparam name="TNodeData">The type of data associated with the nodes.</typeparam>
+/// 
+/// <example>
+/// Usage:
+/// <code>
+/// // 1. Instantiate the NodeLayoutHandler.
+/// NodeLayoutHandler<MyNodeType> layoutHandler = new NodeLayoutHandler<MyNodeType>();
+///
+/// // 2. Add nodes to the layout handler.
+/// ISimpleGraphNode<MyNodeType> node = ...; // Obtain or create your node.
+/// layoutHandler.AddNode(node);
+///
+/// // 3. (Optional) If you have a predefined root or starting node, you can use it to calculate node positions.
+/// // Otherwise, the first added node will be considered as the root.
+/// layoutHandler.CalPos(myRootNodeData);
+///
+/// // 4. Retrieve the position for a specific node's data.
+/// Vector2 position = layoutHandler.GetPos(specificNodeData);
+/// </code>
+/// </example>
+/// 
+/// <remarks>
+/// The class uses a breadth-first search (BFS) traversal mechanism to calculate node positions. 
+/// Ensure all nodes are added to the layout handler before calling the CalPos method to guarantee correct position calculations.
+/// </remarks>
+/// 
 
-/*
- * NodeLayoutHandler.cs
- * --------------------
- * Provides functionality to manage the layout of nodes in a graph.
- * 
- * Key Components:
- * - ISimpleGraphNode<T>: A generic interface for graph nodes.
- * - NodeLayoutHandler<TNodeData>: A generic class to handle node layouts.
- * 
- * Usage:
- * - NodeLayoutHandler is responsible for determining node positions within the graph view.
- * - Provides a mechanism to quickly retrieve node position based on its associated data.
- */
-using UnityEditor.Experimental.GraphView; // Added this for access to the Port class
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,12 +63,8 @@ namespace Dialog.Graph
 
         public void AddNode(ISimpleGraphNode<TNodeData> node)
         {
-            Debug.Log("processing: " + node.node_id);
-
             nodes.Add(node);
             dataToNodeLookup[node.Data] = node;
-            Debug.Log("processing: " + dataToNodeLookup.Count);
-
         }
 
         public void calPos(TNodeData root)
@@ -74,8 +85,6 @@ namespace Dialog.Graph
                 for (int i = 0; i < nodesAtCurrentDepth; i++)
                 {
                     var currentNode = queue.Dequeue();
-                    Debug.Log("processing: " + currentNode.node_id);
-
                     if (!nodeDepths.TryGetValue(currentNode, out var existingDepth) || currentDepth > existingDepth)
                     {
                         nodeDepths[currentNode] = currentDepth;
