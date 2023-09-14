@@ -86,19 +86,7 @@ namespace Dialog.Graph
                 nodesLookup.Add(graphNode.Data.Id, graphNode);  // Use ID as the key
             }
 
-            // 2. Calculate positions once for all nodes
-            graphPositions.calPos(nodesHandler.Nodes["root"]);
 
-            // 3. Assign calculated positions to all nodes
-            foreach (var entry in nodesHandler.Nodes)
-            {
-                var jsonNode = entry.Value;
-                var graphNode = nodesLookup[jsonNode.Id];  // Retrieve the previously added node using ID as the key
-                var position = graphPositions.getPos(jsonNode);
-
-                graphNode.SetPosition(new Rect(position.x, position.y, 100, 150));
-                this.AddElement(graphNode);
-            }
 
 
             foreach (var entry in nodesHandler.Nodes)
@@ -123,8 +111,20 @@ namespace Dialog.Graph
                     }
                 }
             }
-            
 
+            // 2. Calculate positions once for all nodes
+            graphPositions.calPos(nodesHandler.Nodes["root"]);
+
+            // 3. Assign calculated positions to all nodes
+            foreach (var entry in nodesHandler.Nodes)
+            {
+                var jsonNode = entry.Value;
+                var graphNode = nodesLookup[jsonNode.Id];  // Retrieve the previously added node using ID as the key
+                var position = graphPositions.getPos(jsonNode);
+
+                graphNode.SetPosition(new Rect(position.x, position.y, 100, 150));
+                this.AddElement(graphNode);
+            }
 
             foreach (var graphNode in nodesLookup.Values)
             {
