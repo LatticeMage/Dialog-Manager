@@ -25,10 +25,13 @@ namespace Dialog.Graph
         public List<ISimpleGraphNode<Json.JsonNode>> preNodes { get; private set; } = new List<ISimpleGraphNode<Json.JsonNode>>();
         public List<ISimpleGraphNode<Json.JsonNode>> nextNodes { get; private set; } = new List<ISimpleGraphNode<Json.JsonNode>>();
         public Json.JsonNode Data { get; private set; }
+        
+        public string node_id { get; set; }
 
         public JsonGraphNode(Json.JsonNode data)
         {
             Data = data;
+            node_id = data.Id;
 
             title = data.Id;
             AddToClassList("jsonGraphNode");

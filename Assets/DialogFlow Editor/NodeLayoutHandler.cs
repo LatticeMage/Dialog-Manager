@@ -24,6 +24,8 @@ namespace Dialog.Graph
         List<ISimpleGraphNode<T>> preNodes { get; }
         List<ISimpleGraphNode<T>> nextNodes { get; }
         T Data { get; }
+        public string node_id { get; set; }
+
     }
 
     public class NodeLayoutHandler<TNodeData>
@@ -51,6 +53,8 @@ namespace Dialog.Graph
             int xPosition = 0;
             foreach (var node in nodes)
             {
+                Debug.Log("processing: " + node.node_id);
+
                 nodePositions[node] = new Vector2(xPosition, 100);
                 xPosition += xOffset;
             }
